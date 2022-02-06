@@ -1,0 +1,205 @@
+{% extends 'kep/base/base.html' %}
+
+{% block title %}Skep List BDN{% endblock title %}
+{% block head %}
+<style>
+    .asteriskField {
+        display: none;
+    }
+</style>
+{% endblock head %}
+
+{% block content %}
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-header border-0">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h3 class="mb-0">Barang Dikuasai Negara</h3>
+                    </div>
+                    {% if p2 %}
+                    <div class="col text-right">
+                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addBDN">
+                            Tambah
+                        </button>
+                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
+                            data-target="#download">
+                            Download
+                        </button>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table align-items-center table-flush">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Nomor</th>
+                            <th scope="col">Nomor SBP</th>
+                            <th scope="col">Tanggal SBP</th>
+                            <th scope="col">Nomor KEP BDN</th>
+                            <th scope="col">Tanggal KEP BDN</th>
+                            <th scope="col">Status</th>
+                            <th scope='col'>Item Barang</th>
+                            <th></th>
+                            <th></th>
+                    </thead>
+
+                    <tbody>
+                        {% for bdn in page_obj %}
+                        <tr>
+                            <td scope="row">{{forloop.counter0|add:page_obj.start_index}}</td>
+                            <td>SBP-{{bdn.no_sbp}}/WBC.09/KPP.MP.06/{{bdn.tanggal_sbp|date:"Y" }}</td>
+                            <td>{{bdn.tanggal_sbp|date:"d-m-Y" }}</td>
+                            <td>KEP-{{bdn.no_bdn}}/WBC.09/KPP.MP.06/{{bdn.tanggal_bdn|date:"Y" }}</td>
+                            <td>{{bdn.tanggal_bdn|date:"d-m-Y" }}</td>
+                            <td>
+                                {% if bdn.no_bmn %}
+                                <span class="badge badge-dot mr-4">
+                                    <i class="bg-success"></i>
+                                    <span class="status">BMN</span>
+                                </span>
+                                {% else %}
+                                <span class="badge badge-dot mr-4">
+                                    <i class="bg-warning"></i>
+                                    <span class="status">BDN</span>
+                                </span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {{bdn.jumlah_barang}}
+                            </td>
+                            <td class="align-middle">
+                                <div class="d-flex justify-content-around container">
+                                    <div>
+                                        <a href={% url 'detail-bdn' bdn.id %}>
+                                            <button type="button" class="btn btn-primary btn-sm">Detail</button>
+                                        </a>
+                                    </div>
+                                    {% if p2 %}
+                                    <a data-toggle="dropdown" class="btn icon icon-sm icon-shape text-primary ml-2">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </a>
+                                    <div class="dropdown-menu  dropdown-menu-right ">
+                                        <a href={% url 'update-bdn' bdn.id %} class="dropdown-item">
+                                            Edit
+                                        </a>
+                                        <div class="dropdown-divider"></div>
+                                        <a href={% url 'delete-bdn' bdn.id %}
+                                            class="dropdown-item text-danger">Delete</a>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <nav aria-label="Page navigation example" class="{% if not skep_list %}mt-5{% endif %}">
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1" tabindex="-1">
+                                <i class="fa fa-angle-left"></i>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                        </li>
+                        <li class="page-item"><a class="page-link"
+                                href="?page={{ page_obj.previous_page_number }}">{{page_obj.previous_page_number}}</a>
+                        </li>
+                        {% endif %}
+
+                        <li class="page-item active"><a class="page-link" href="#">{{ page_obj.number }}</a></li>
+
+                        {% if page_obj.has_next %}
+                        <li class="page-item"><a class="page-link"
+                                href="?page={{ page_obj.next_page_number }}">{{page_obj.next_page_number}}</a></li>
+
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">
+                                <i class="fa fa-angle-right"></i>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </li>
+                        {% endif %}
+
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Add Nomor Skep BDN id=addBDN-->
+<div class="modal fade" id="addBDN" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Tambah Nomor Skep Barang Dikuasai Negara</h5>
+            </div>
+            <form role="form" method="POST">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <h3>Dasar Skep Barang Dikuasai Negara</h3>
+                    <input type='hidden' name='action' value='addBDN'>
+                    <div class="form-group mb-3">
+                        {% load crispy_forms_tags %}
+                        {{ form.no_sbp|as_crispy_field  }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.tanggal_sbp|as_crispy_field  }}
+                    </div>
+                    <h3>Nomor Skep Barang Dikuasai Negara</h3>
+                    <div class="form-group">
+                        {{ form.no_bdn|as_crispy_field  }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.tanggal_bdn|as_crispy_field  }}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Download CSV id=download-->
+<div class="modal fade" id="download" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Download CSV File BDN</h5>
+            </div>
+            <form role="form" method="POST" action={% url 'export-csv-bdn' %}>
+                {% csrf_token %}
+                <div class="modal-body">
+                    <input type='hidden' name='action' value='download'>
+                    <div class="form-group mb-3">
+                        <label for="example-date-input" class="form-control-label">Tanggal Awal</label>
+                        <input class="form-control" type="date" name="tgl_awal">
+                    </div>
+                    <div class="form-group">
+                        <label for="example-date-input" class="form-control-label">Tanggal Akhir</label>
+                        <input class="form-control" type="date" name="tgl_akhir">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Download</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+{% endblock content %}

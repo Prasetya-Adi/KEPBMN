@@ -1,0 +1,14 @@
+asgiref==3.5.0
+autopep8==1.6.0
+Django==4.0.2
+django-crispy-forms==1.14.0
+flake8==4.0.1
+lxml==4.7.1
+mccabe==0.6.1
+pycodestyle==2.8.0
+pyflakes==2.4.0
+PyMySQL==1.0.2
+python-decouple==3.5
+python-docx==0.8.11
+sqlparse==0.4.2
+toml==0.10.2

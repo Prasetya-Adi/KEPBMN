@@ -1,0 +1,41 @@
+{% extends 'kep/base/base.html' %}
+
+{% block title %}Update{% endblock title %}
+{% block head %}
+<style>
+    .asteriskField {
+        display: none;
+    }
+</style>
+{% endblock head %}
+
+{% block content %}
+{% load crispy_forms_tags %}
+
+<div class="col-xl-12">
+    <div class="card">
+        <div class="card-header border-0">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h3 class="mb-2">Edit Barang Dikuasai Negara</h3>
+                </div>
+            </div>
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="modal-body">
+
+                {{ form.no_sbp|as_crispy_field  }}
+                {{ form.tanggal_sbp|as_crispy_field  }}
+                {{ form.no_bdn|as_crispy_field  }}
+                {{ form.tanggal_bdn|as_crispy_field  }}
+
+                <input type="submit" value="Update" class="btn btn-warning" />
+                <a href="/"><button type="button" class="btn btn-secondary">Cancel</button></a>
+            </div>
+        </form>
+
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,41 @@
+{% extends 'kep/base/base.html' %}
+
+{% block title %}Update{% endblock title %}
+{% block head %}
+<style>
+    .asteriskField {
+        display: none;
+    }
+</style>
+{% endblock head %}
+
+{% block content %}
+{% load crispy_forms_tags %}
+
+<div class="col-xl-12">
+    <div class="card">
+        <div class="card-header border-0">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h3 class="mb-2">Edit Jenis Barang</h3>
+                </div>
+            </div>
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="modal-body">
+
+                {{ form.jenis_barang|as_crispy_field  }}
+                {{ form.isi_satuan|as_crispy_field  }}
+                {{ form.jumlah_kemasan_satuan|as_crispy_field  }}
+
+                <input type="submit" value="Update" class="btn btn-warning" />
+                <a href={% url 'jenis-barang-list' %}><button type="button"
+                        class="btn btn-secondary">Cancel</button></a>
+            </div>
+        </form>
+
+    </div>
+</div>
+{% endblock content %}

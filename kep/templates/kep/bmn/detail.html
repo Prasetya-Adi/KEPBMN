@@ -1,0 +1,86 @@
+{% extends 'kep/base/base.html' %}
+
+{% block title %}Skep Detail{% endblock title %}
+
+{% block content %}
+
+<div class="col-xl-12">
+    <div class="card">
+        <div class="card-header border-0">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h3 class="mb-2">Barang Milik Negara</h3>
+                    <h4 class="mb-0">No: KEP-{{bmn.no_bmn}}/WBC.09/KPP.MP.06/2021</h4>
+                    <h4 class="mb-0">Tanggal: {{bmn.tanggal_bmn|date:"d F Y" }}</h4>
+                </div>
+
+                <div class="col text-right d-flex justify-content-end">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="id" value="{{bmn.id}}">
+                        <input type='hidden' name='action' value='jadikan_bdn'>
+                        <Button type="submit" class="btn btn-sm btn-primary mr-2">Jadikan BDN</Button>
+                    </form>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="id" value="{{bmn.id}}">
+                        <input type='hidden' name='action' value='download'>
+                        <Button type="submit" class="btn btn-sm btn-primary">Download</Button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive">
+
+            <table class="table align-items-center table-flush">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">Jenis Barang
+                        </th>
+                        <th scope="col">Merek
+                        </th>
+                        <th scope="col">Isi
+                        </th>
+                        <th scope="col">Kemasan
+                        </th>
+                        <th scope="col">Harga Jual Eceran
+                        </th>
+                        <th scope="col">Nilai
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for b in barang %}
+                    <tr>
+                        <td>
+                            {{b.jenis_barang.jenis_barang}}
+                        </td>
+                        <td>
+                            {{b.merek}}
+                        </td>
+                        <td>
+                            {{b.isi}} {{b.jenis_barang.isi_satuan}}
+                        </td>
+                        <td>
+                            {{b.jumlah_kemasan}} {{b.jenis_barang.jumlah_kemasan_satuan}}
+                        </td>
+                        <td>
+                            {{b.harga_jual_eceran}} / {{b.jenis_barang.jumlah_kemasan_satuan}}
+                        </td>
+                        <td>
+                            {{b.nilai}}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock content %}

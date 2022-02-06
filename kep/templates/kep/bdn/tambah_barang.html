@@ -1,0 +1,41 @@
+{% extends 'kep/base/base.html' %}
+
+{% block title %}Skep Detail{% endblock title %}
+{% block head %}
+<style>
+    .asteriskField {
+        display: none;
+    }
+</style>
+{% endblock head %}
+
+{% block content %}
+<!-- Tambah Barang-->
+
+<div class="col-xl-12">
+    <div class="card">
+        <div class="card-header border-0">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h3 class="mb-2">Tambah Barang Dikuasai Negara</h3>
+                    <h4 class="mb-0">No: KEP-{{bdn.no_bdn}}/WBC.09/KPP.MP.06/{{bdn.tanggal_bdn|date:"Y" }}</h4>
+                    <h4 class="mb-0">Tanggal: {{bdn.tanggal_bdn|date:"d F Y" }}</h4>
+                </div>
+            </div>
+        </div>
+        <form role="form" method="POST">
+            {% csrf_token %}
+            <div class="modal-body">
+                <!-- Jenis Barang-->
+
+                {% load crispy_forms_tags %}
+                {{form|crispy}}
+
+                <button type="submit" class="btn btn-primary" tabindex="10">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+{% endblock content %}

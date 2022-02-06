@@ -1,0 +1,177 @@
+{% extends 'kep/base/base.html' %}
+{% block head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock head %}
+{% block content %}
+<div class="container-fluid mt--6">
+    <div class="row mt-2">
+        <div class="col-xl-3 col-md-6">
+            <div class="card card-stats">
+                <!-- Card body -->
+                <a href={% url 'list-bdn' %}>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <h5 class="card-title text-uppercase text-muted mb-0">Total BDN</h5>
+                                <span class="h2 font-weight-bold mb-0">{{bdn_total}}</span>
+                            </div>
+                            <div class="col-auto">
+                                <div class="icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
+                                    <i class="ni ni-box-2"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card card-stats">
+                <!-- Card body -->
+                <a href={% url 'list-bmn' %}>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <h5 class="card-title text-uppercase text-muted mb-0">Total BMN</h5>
+                                <span class="h2 font-weight-bold mb-0">{{bmn_total}}</span>
+                            </div>
+                            <div class="col-auto">
+                                <div class="icon icon-shape bg-gradient-green text-white rounded-circle shadow">
+                                    <i class="ni ni-box-2"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-xl-8">
+            <div class="card">
+                <div class="card-header bg-transparent">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h6 class="text-uppercase ls-1 mb-1">Overview</h6>
+                            <h5 class="h3 mb-0">Jumlah Dokumen BDN dan BMN</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <!-- Chart -->
+                    <div class="chart-container" style="position: relative;">
+                        <!-- Chart wrapper -->
+                        <canvas id="myChart" class="chart-canvas" width="100%"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="card">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h3 class="mb-0">Saldo BMN</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <!-- Projects table -->
+                    <table class="table align-items-center table-flush">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Jenis</th>
+                                <th scope="col">Jumlah</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for b in bbbmn %}
+                            <tr>
+                                <td>
+                                    {{b.jb}}
+                                </td>
+                                <td>
+                                    {{b.total}} {{b.sat}}
+                                </td>
+
+                            </tr>
+                            {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const labels = {{labels_bmn | safe}};
+    const data = {
+        datasets: [{
+                type: 'bar',
+                label: 'BDN',
+                backgroundColor: '#5e72e4',
+                borderColor: '#5e72e4',
+                data: {{data_bdn | safe}},
+            },
+            {
+                type: 'bar',
+                label: 'BMN',
+                backgroundColor: '#172b4d',
+                borderColor: '#172b4d',
+                data: {{data_bmn | safe}},
+            }
+        ],
+        labels: labels,
+    };
+
+    const config = {
+
+        data: data,
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1,
+                    }
+                }
+            }
+        }
+    };
+
+    const myChart = new Chart(document.getElementById('myChart'),
+        config
+    );
+
+    {%comment %}
+    Dicoba Baru {
+        %
+        endcomment %
+    } {
+        %
+        comment %
+    }
+    const ctx = document.getElementById('myChart');
+
+    const mixedChart = new Chart(ctx, {
+        data: {
+            datasets: [{
+                type: 'bar',
+                label: 'Bar Dataset',
+                data: [10, 20, 30, 40]
+            }, {
+                type: 'line',
+                label: 'Line Dataset',
+                data: [50, 50, 50, 50],
+            }],
+            labels: ['January', 'February', 'March', 'April']
+        },
+        options: options
+    }); {%endcomment %}
+</script>
+{% endblock content %}
